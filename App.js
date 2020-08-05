@@ -1,92 +1,53 @@
-import React, { Component } from "react";
 import axios from "axios";
-import "./styles.css";
 
-class App extends Component {
-  // constructor() {
-  //   super();
-  //   this.state = {
-  //     doggos: [],
-  //     doggoText: ""
-  //   };
-  // }
+axios.get('https://api.github.com/users/andre-jeon')
+    .then(res => {
+        console.log('hi', res.data)
+    })
+    .cathch(err => {
+        console.log(err)
+    })
 
-  // constructor shortcut
-  state = {
-    doggos: [],
-    doggoText: ""
-  };
+function cardMaker(obj) {
 
-  componentDidMount() {
-    // fetch initial doggo data
-    axios
-      .get("https://api.github.com/users/andre-jeon")
-      .then(res => {
-        this.setState({
-          doggos: res.data.message
-        });
-      })
-      .catch(err => console.log(err));
-  }
+    const card = document.createElement('div')
+    const cardInfo = document.createElement('div')
+    const image = document.createElement('img')
+    const name = document.createElement('h3')
+    const username = document.createElement('p')
+    const location = document.createElement('p')
+    const profile = document.createElement('p')
+    const address = document.createElement('a')
+    const followers = document.createElement('p')
+    const following = document.createElement('p')
+    const bio = document.createElement('p')
 
-  componentDidUpdate(prevProps, prevState) {
-    // has doggos state changed?
-    // is yes, did user search for 'chihuahua'?
-    // if yes, reset search to "husky"
-    if (prevState.doggos !== this.state.doggos) {
-      if (this.state.doggoText === "chihuahua") {
-        axios
-          .get(`https://dog.ceo/api/breed/husky/images`)
-          .then(res => {
-            this.setState({
-              doggos: res.data.message,
-              doggoText: "husky"
-            });
-          })
-          .catch(err => console.log(err));
-      }
-    }
-  }
+    card.classList.add('card')
+    cardInfo.classList.add('card-info')
+    name.classList.add('name')
+    username.classList.add('username')
 
-  handleChanges = e => {
-    const { value } = e.target;
+    image.src = obj.avatar_url
+    name.textContent = obj.name
+    username.textContent = obj.login
+    location.textContent = `Location: ${obj.location}`
+    profile.textContent = 'Profile: '
+    address.textContent = obj.html_url
+    address.href = obj.html_url
+    followers.textContent = `Followers: ${obj.followers}`
+    following.textContent = `Following: ${obj.following}`
+    bio.textContent = `Bio: ${obj.bio}`
 
-    this.setState({
-      doggoText: value
-    });
-  };
+    card.appendChild(image)
+    card.appendChild(cardInfo)
+    cardInfo.appendChild(name)
+    cardInfo.appendChild(username)
+    cardInfo.appendChild(location)
+    cardInfo.appendChild(profile)
+    profile.appendChild(address)
+    cardInfo.appendChild(followers)
+    cardInfo.appendChild(following)
+    cardInfo.appendChild(bio)
 
-  fetchDoggos = e => {
-    e.preventDefault();
-
-    axios
-      .get(`https://dog.ceo/api/breed/${this.state.doggoText}/images`)
-      .then(res => {
-        this.setState({
-          doggos: res.data.message
-        });
-      })
-      .catch(err => console.log(err));
-  };
-
-  render() {
-    return (
-      <div className="App">
-        <h1>Hello Doggos</h1>
-        <input
-          type="text"
-          value={this.state.doggoText}
-          onChange={this.handleChanges}
-        />
-        <button onClick={this.fetchDoggos}>Fetch doggos</button>
-        <div className="doggos">
-          {this.state.doggos.map(doggo => (
-            <img width="200" src={doggo} key={doggo} alt={doggo} />
-          ))}
-        </div>
-      </div>
-    );
-  }
+    return card
 }
-
-export default App;
