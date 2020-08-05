@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 
 import Usercard from './Component/Usercard'
+import Followers from './Component/Followers'
 import axios from "axios";
 
 class App extends React.Component {
@@ -16,23 +17,38 @@ class App extends React.Component {
 
   componentDidMount() {
     axios.get('https://api.github.com/users/andre-jeon')
-    .then(res => {
+      .then(res => {
         this.setState({
           user: res.data
         })
-    })
-    .catch(err => {
+      })
+      .catch(err => {
         console.log(err)
-    })
+      })
   }
 
-  render() {
-    return (
-      <div className="App">
-        <Usercard user={this.state.user} />
-      </div>
-    );
-  }
+
+  fetchFollowers = e => {
+    e.preventDefault();
+
+    axios
+      .get('https://api.github.com/users/andre-jeon/followers')
+      .then(res => {
+        this.setState({
+          followers: res.data.followers
+        });
+      })
+      .catch(err => console.log(err));
+  };
+
+render() {
+  return (
+    <div className="App">
+      <Usercard user={this.state.user} />
+      <Followers followers={this.state.followers}/>
+    </div>
+  );
+}
 
 }
 
