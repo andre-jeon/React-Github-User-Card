@@ -2,11 +2,14 @@ import axios from "axios";
 
 axios.get('https://api.github.com/users/andre-jeon')
     .then(res => {
-        console.log('hi', res.data)
+        cardS.appendChild(cardMaker(res.data))
     })
     .cathch(err => {
         console.log(err)
     })
+
+
+const cardS = document.querySelector('.cards')
 
 function cardMaker(obj) {
 
